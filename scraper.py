@@ -46,7 +46,8 @@ LEVEL_KEYWORDS = [
     "trainee",
     "werkstudent",
     "praktikum",
-    "apprentice",
+    "student",
+    "working student",
     "associate",
     "analyst",
 ]
