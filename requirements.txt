@@ -1,0 +1,16 @@
+# Full install instructions:
+#
+#   mamba create -n job_dashboard python=3.11
+#   mamba install -n job_dashboard -c conda-forge requests beautifulsoup4 pandas lxml
+#   mamba run -n job_dashboard pip install --upgrade streamlit python-jobspy
+#
+# Or use the split files:
+#   mamba install -n job_dashboard --file requirements-conda.txt -c conda-forge
+#   mamba run -n job_dashboard pip install -r requirements-pip.txt
+
+requests>=2.31
+beautifulsoup4>=4.12
+pandas>=2.0
+lxml>=4.9
+streamlit>=1.32
+python-jobspy>=1.1
