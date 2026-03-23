@@ -14,6 +14,7 @@ import webbrowser
 import time
 import sys
 import os
+import logging
 
 DASHBOARD_URL = "http://localhost:8501"
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +23,10 @@ CONDA_ENV = "job_dashboard"
 # Find the mamba/conda python for this env
 PYTHON = sys.executable
 STREAMLIT = os.path.join(os.path.dirname(PYTHON), "streamlit")
+
+LOG_FILE = os.path.join(APP_DIR, "menubar_app.log")
+logging.basicConfig(filename=LOG_FILE, level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(message)s")
 
 
 class JobDashboardApp(rumps.App):
@@ -46,15 +51,20 @@ class JobDashboardApp(rumps.App):
     def _start_streamlit(self):
         if self.streamlit_proc and self.streamlit_proc.poll() is None:
             return  # already running
+        log_fh = open(LOG_FILE, "a")
         self.streamlit_proc = subprocess.Popen(
             [STREAMLIT, "run", "app.py", "--server.headless", "true",
              "--server.port", "8501"],
             cwd=APP_DIR,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=log_fh,
+            stderr=log_fh,
         )
-        # Wait for server to be ready then open browser
+        # Wait for server to be ready, then check it actually started
         time.sleep(3)
+        if self.streamlit_proc.poll() is not None:
+            rumps.notification("Insurance Jobs", "Server failed to start",
+                               f"Check {LOG_FILE} for details.")
+            return
         webbrowser.open(DASHBOARD_URL)
         rumps.notification(
             title="Insurance Jobs",
@@ -70,8 +80,9 @@ class JobDashboardApp(rumps.App):
         threading.Thread(target=self._start_streamlit, daemon=True).start()
 
     def stop_server(self, _):
-        if self.streamlit_proc and self.streamlit_proc.poll() is None:
-            self.streamlit_proc.terminate()
+        proc = self.streamlit_proc
+        if proc and proc.poll() is None:
+            proc.terminate()
             self.streamlit_proc = None
             rumps.notification("Insurance Jobs", "", "Server stopped.")
         else:
@@ -83,14 +94,22 @@ class JobDashboardApp(rumps.App):
     def scrape_now(self, _):
         rumps.notification("Insurance Jobs", "Scraping started…", "This may take a minute.")
         def _run():
-            subprocess.run(
+            result = subprocess.run(
                 [PYTHON, "-c",
                  "from scraper import run_all_scrapers; from db import init_db, upsert_jobs; "
                  "init_db(); df = run_all_scrapers(); n = upsert_jobs(df) if not df.empty else 0; "
                  "print(n)"],
                 cwd=APP_DIR,
+                capture_output=True,
+                text=True,
             )
-            rumps.notification("Insurance Jobs", "Scrape complete ✓", "Refresh the dashboard to see new jobs.")
+            if result.returncode != 0:
+                logging.error("Scraper failed:\n%s", result.stderr)
+                rumps.notification("Insurance Jobs", "Scrape failed ✗",
+                                   f"Check {LOG_FILE} for details.")
+            else:
+                rumps.notification("Insurance Jobs", "Scrape complete ✓",
+                                   "Refresh the dashboard to see new jobs.")
         threading.Thread(target=_run, daemon=True).start()
 
     def quit_app(self, _):
