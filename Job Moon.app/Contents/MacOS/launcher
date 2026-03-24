@@ -1,0 +1,3 @@
+#!/bin/bash
+exec arch -arm64 /Users/philip/miniforge3/envs/job_dashboard/bin/python \
+    /Users/philip/Documents/GitHub/job_dashboard/menubar_app.py

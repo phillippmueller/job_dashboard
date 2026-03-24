@@ -27,3 +27,74 @@ For `use_container_width=True`, use `width='stretch'`. For `use_container_width=
 
 For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
 2026-03-23 23:39:08.793 Port 8501 is not available
+  Stopping...
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.126:8501
+  External URL: http://31.10.151.80:8501
+
+2026-03-24 07:36:31.073 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-03-24 07:42:14.607 Port 8501 is not available
+[launcher] started at Tue Mar 24 07:53:35 CET 2026
+2026-03-24 07:53:36.396 Port 8501 is not available
+Exception in thread Thread-1 (_start_streamlit):
+Traceback (most recent call last):
+  File "/Users/philip/miniforge3/envs/job_dashboard/lib/python3.11/threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "/Users/philip/miniforge3/envs/job_dashboard/lib/python3.11/threading.py", line 982, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/philip/Documents/GitHub/job_dashboard/menubar_app.py", line 65, in _start_streamlit
+    rumps.notification("Insurance Jobs", "Server failed to start",
+  File "/Users/philip/miniforge3/envs/job_dashboard/lib/python3.11/site-packages/rumps/notifications.py", line 194, in notify
+    notification_center = _default_user_notification_center()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/philip/miniforge3/envs/job_dashboard/lib/python3.11/site-packages/rumps/notifications.py", line 87, in _default_user_notification_center
+    raise RuntimeError(info)
+RuntimeError: Failed to setup the notification center. This issue occurs when the "Info.plist" file cannot be found or is missing "CFBundleIdentifier".
+
+In this case there is no file at "/Users/philip/miniforge3/envs/job_dashboard/bin/Info.plist"
+
+Running the following command should fix the issue:
+/usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string "rumps"' /Users/philip/miniforge3/envs/job_dashboard/bin/Info.plist
+
+[launcher] started at Tue Mar 24 07:59:47 CET 2026
+2026-03-24 07:59:48.243 Port 8501 is not available
+  Stopping...
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.126:8501
+  External URL: http://31.10.151.80:8501
+
+2026-03-24 08:12:07.273 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+  Stopping...
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.3.4.222:8501
+  External URL: http://195.176.96.251:8501
+
+2026-03-24 11:13:52.336 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-03-24 11:14:28,279 - INFO - JobSpy:Linkedin - finished scraping
+Scraper scrape_jobspy failed: can only concatenate str (not "float") to str
+2026-03-24 11:15:10.057 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
